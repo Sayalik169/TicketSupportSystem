@@ -1,0 +1,59 @@
+.register-container {
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    min-height: 100vh; /* Set minimum height for full viewport */
+    background-color: #f0f0f0; /* Light gray background */
+    /* Optional: Add a background image (replace with your path) */
+    /* background-image: url("path/to/your/background-image.jpg"); */
+    /* background-size: cover; */
+    /* background-position: center; */
+  }
+  
+  .register-form-wrapper {
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    padding: 30px;
+    border-radius: 10px;
+    color: #fff; /* White text */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-control {
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2); /* Light background for input fields */
+    color: #fff; /* White text for input fields */
+    padding: 10px;
+  }
+
+
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5; /* Light background color */
+  }
+  
+  .login-form {
+    background-color: #fff; /* White form background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 30px;
+    width: 400px; /* Adjust width as needed */
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff; /* Blue button color */
+    border-color: #007bff; /* Blue button border */
+    width: 100%;
+  }
+  

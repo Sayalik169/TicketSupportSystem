@@ -1,0 +1,28 @@
+.container {
+    /* Styles for the container element */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .ticketList {
+    /* Styles for the ticket list */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .ticketItem {
+    /* Styles for individual ticket items */
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .ticketItem:last-child {
+    /* Optional styling for the last ticket item */
+    border-bottom: none;
+  }
+  
