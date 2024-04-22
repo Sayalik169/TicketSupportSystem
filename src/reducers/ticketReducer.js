@@ -48,16 +48,17 @@ const ticketSlice = createSlice({
   initialState,
   reducers: {
     createTicketSuccess(state, action) {
-      state.tickets.push(action.payload);
+      console.log(action.payload);
+      state.push(action.payload);
     },
     updateTicket(state, action) {
-      const updatedTicketIndex = state.tickets.findIndex(ticket => ticket.id === action.payload.id);
+      const updatedTicketIndex = state.findIndex(ticket => ticket.id === action.payload.id);
       if (updatedTicketIndex !== -1) {
-        state.tickets[updatedTicketIndex] = { ...state.tickets[updatedTicketIndex], ...action.payload.updates };
+        state[updatedTicketIndex] = { ...state[updatedTicketIndex], ...action.payload.updates };
       }
     },
     deleteTicket(state, action) {
-      state.tickets = state.tickets.filter(ticket => ticket.id !== action.payload.id);
+      state = state.filter(ticket => ticket.id !== action.payload.id);
     },
   },
 });

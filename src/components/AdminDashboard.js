@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../styles/admindashboard.css';
 import { updateTicket } from '../reducers/ticketReducer'; // Import updateTicket action
-
+import {Link} from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const tickets = useSelector(state => state.tickets.allTickets);
+  const tickets = useSelector(state => state.tickets);
   const dispatch = useDispatch();
   const [selectedTicketId, setSelectedTicketId] = useState(null); // Corrected function name
 
@@ -23,7 +23,7 @@ const AdminDashboard = () => {
         }
         const fetchedTickets = await response.json();
         console.log('fetch tickets',fetchedTickets);
-       // dispatch({ type: 'tickets/setTickets', payload: fetchedTickets }); // Dispatch a custom action to set tickets
+       dispatch({ type: 'tickets/createTicketsSuccess', payload: fetchedTickets }); // Dispatch a custom action to set tickets
       } catch (error) {
         console.error('Error fetching tickets:', error);
         // Handle error display to user (optional)
@@ -72,10 +72,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mt-5">
+    <Link to="/end-user/login">End user login</Link>
       <h2>Admin Dashboard</h2>
       <h3>All Tickets:</h3>
-      <ul className={`${styles.ticketList} list-group`}>
-        {tickets.map(ticket => (
+      <ul>
+        {tickets.length >0 && tickets.map(ticket => (
           <li key={ticket.id} className={`${styles.ticketItem} list-group-item d-flex justify-content-between align-items-center`} onClick={() => handleSelectTicket(ticket.id)}>
             <div>
               {ticket.title}
