@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../styles/admindashboard.css';
-import { updateTicket } from '../reducers/ticketReducer'; // Import updateTicket action
-import {Link} from 'react-router-dom';
+import { updateTicket,deleteTicket,createTicketSuccess } from '../reducers/ticketReducer'; // Import updateTicket action
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const tickets = useSelector(state => state.tickets);
@@ -22,8 +22,8 @@ const AdminDashboard = () => {
           throw new Error('Failed to fetch tickets');
         }
         const fetchedTickets = await response.json();
-        console.log('fetch tickets',fetchedTickets);
-       dispatch({ type: 'tickets/createTicketsSuccess', payload: fetchedTickets }); // Dispatch a custom action to set tickets
+        console.log( fetchedTickets);
+        dispatch(createTicketSuccess(fetchedTickets)); // Dispatch a custom action to set tickets
       } catch (error) {
         console.error('Error fetching tickets:', error);
         // Handle error display to user (optional)
@@ -34,27 +34,40 @@ const AdminDashboard = () => {
   }, []); // Add dispatch as a dependency to ensure effect runs only once
 
   // Handle potential errors and empty state (optional)
-  // if (!tickets) {
-  //   return <div>Loading tickets...</div>;
-  // }
+   if (!tickets) {
+     return <div>Loading tickets...</div>;
+   }
 
-  // if (tickets.length === 0) {
-  //   return <div>No tickets found.</div>;
-  // }
+   if (tickets.length === 0) {
+    return <div>No tickets found.</div>;
+   }
 
   const handleStatusChange = async (ticketId, newStatus) => {
     try {
-      const selectedTicket = tickets.find(ticket => ticket.id === ticketId);
 
-      const response = await fetch(`https://localhost:7226/api/Values/Updateticket`, {
-        method: 'PATCH',
+      const selectedTicket = tickets.find(ticket => ticket.id === ticketId);
+      console.log('ticketstatuschange', selectedTicket);
+      // Check if the status update is causing recursive calls
+      if (selectedTicket.status === newStatus) {
+        console.warn('Status is already set to the new value, avoiding recursion');
+        return;
+      }
+      const updatedTicket = {
+        id: ticketId,
+        title: selectedTicket.title,
+        description: selectedTicket.description,
+        createdBy: selectedTicket.createdBy,
+        assignedTo: selectedTicket.assignedTo,
+        status: newStatus,
+        createdAt: selectedTicket.createdAt,
+        resolvedAt: new Date().toISOString(),
+      };
+      console.log('updatedtickets',JSON.stringify(updateTicket));
+
+      const response = await fetch('https://localhost:7226/api/Values/Updateticket', {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: ticketId,
-          assignedTo: selectedTicket?.assignedTo, // Use optional chaining
-          status: newStatus,
-          resolvedAt: new Date().toISOString(), // Set resolvedAt to current time
-        }),
+        body: JSON.stringify(updatedTicket),
       });
 
       if (!response.ok) {
@@ -62,22 +75,43 @@ const AdminDashboard = () => {
       }
 
       setSelectedTicketId(null); // Clear selected ticket after successful update
-      dispatch(updateTicket({ id: ticketId, updates: { status: newStatus } }));
+      //  dispatch(updateTicket({ id: ticketId, updates: { status: newStatus } }));
 
     } catch (error) {
       console.error('Error updating ticket status:', error);
       // Handle error display to user (optional)
     }
   };
+  const handleDeleteTicket = async (ticketId) => {
+    try {
+      const confirmed = window.confirm('Are you sure you want to delete this ticket?');
+      if (!confirmed) return; // Exit if user cancels confirmation
 
+      const response = await fetch(`https://localhost:7226/api/Values/Deleteticket/${ticketId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete ticket');
+      }
+
+      dispatch(deleteTicket(ticketId)); // Dispatch delete action to update Redux state
+
+    } catch (error) {
+      console.error('Error deleting ticket:', error);
+      // Handle error display to user (optional)
+    }
+  };
   return (
     <div className="container mt-5">
-    <Link to="/end-user/login">End user login</Link>
+      <Link to="/end-user/login">End user login</Link>
       <h2>Admin Dashboard</h2>
       <h3>All Tickets:</h3>
-      <ul>
-        {tickets.length >0 && tickets.map(ticket => (
-          <li key={ticket.id} className={`${styles.ticketItem} list-group-item d-flex justify-content-between align-items-center`} onClick={() => handleSelectTicket(ticket.id)}>
+      <h3>{tickets.length}</h3>
+      <ul className={`${styles.ticketList} list-group`}>
+        {tickets.length > 0 && tickets.map((ticket) => (
+          <li key={ticket.id} className={`${styles.ticketItem} list-group-item d-flex justify-content-between align-items-center`} 
+          onClick={() => handleSelectTicket(ticket.id)}>
             <div>
               {ticket.title}
               <br />
@@ -93,11 +127,17 @@ const AdminDashboard = () => {
                 <option value="In Progress">In Progress</option>
                 <option value="Closed">Closed</option>
               </select>
-              <span className="badge bg-primary rounded-pill">{ticket.status}</span>
+              <button
+                  className="btn btn-danger mx-2"
+                  onClick={() => handleDeleteTicket(ticket.id)}
+                >
+                  Delete
+                </button>
             </div>
           </li>
         ))}
       </ul>
+      {tickets.length === 0 && <div>No tickets found.</div>}
     </div>
   );
 };

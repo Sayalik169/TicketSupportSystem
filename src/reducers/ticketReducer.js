@@ -1,63 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  techSupportTickets: [
-    {
-      id: 1,
-      title: "Issue with application login",
-      description: "I am unable to log in to the application using my credentials.",
-      createdBy: "John Doe",
-      assignedTo: "Tech Support Team",
-      status: "Open",
-      createdAt: "2024-04-20T10:00:00Z",
-      resolvedAt: null,
-    },
-    {
-      id: 2,
-      title: "Issue with Network",
-      description: "I am unable to log in to the application using my credentials.",
-      createdBy: "John Doe",
-      assignedTo: "Tech Support Team",
-      status: "Open",
-      createdAt: "2024-04-20T10:00:00Z",
-      resolvedAt: null,
-    },{
-      id: 3,
-      title: "Facing slowness",
-      description: "I am unable to log in to the application using my credentials.",
-      createdBy: "John Doe",
-      assignedTo: "Tech Support Team",
-      status: "Open",
-      createdAt: "2024-04-20T10:00:00Z",
-      resolvedAt: null,
-    },{
-      id: 4,
-      title: "VPN issue",
-      description: "I am unable to log in to the application using my credentials.",
-      createdBy: "John Doe",
-      assignedTo: "Tech Support Team",
-      status: "Open",
-      createdAt: "2024-04-20T10:00:00Z",
-      resolvedAt: null,
-    }
-  ],
-};
+const initialState = 
+   [];
+
 
 const ticketSlice = createSlice({
   name: 'tickets',
   initialState,
   reducers: {
     createTicketSuccess(state, action) {
-      console.log(action.payload);
+      
       state.push(action.payload);
+      console.log('msg**', action.payload);
     },
     updateTicket(state, action) {
+
       const updatedTicketIndex = state.findIndex(ticket => ticket.id === action.payload.id);
+      console.log('reducer- updateticket- ', updatedTicketIndex);
       if (updatedTicketIndex !== -1) {
         state[updatedTicketIndex] = { ...state[updatedTicketIndex], ...action.payload.updates };
       }
     },
     deleteTicket(state, action) {
+      console.log('deleting');
       state = state.filter(ticket => ticket.id !== action.payload.id);
     },
   },
