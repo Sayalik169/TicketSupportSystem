@@ -22,7 +22,7 @@ const AdminDashboard = () => {
           throw new Error('Failed to fetch tickets');
         }
         const fetchedTickets = await response.json();
-        console.log( fetchedTickets);
+        console.log( 'fetchedticktes',fetchedTickets);
         dispatch(createTicketSuccess(fetchedTickets)); // Dispatch a custom action to set tickets
       } catch (error) {
         console.error('Error fetching tickets:', error);
@@ -61,8 +61,16 @@ const AdminDashboard = () => {
         status: newStatus,
         createdAt: selectedTicket.createdAt,
         resolvedAt: new Date().toISOString(),
+        // id: 1,
+        // title: "test",
+        // description: "test",
+        // createdBy: "test",
+        // assignedTo: "test",
+        // status: "test",
+        // createdAt: "test",
+        // resolvedAt: "test",
       };
-      console.log('updatedtickets',JSON.stringify(updateTicket));
+      console.log('updatedtickets',JSON.stringify(updatedTicket));
 
       const response = await fetch('https://localhost:7226/api/Values/Updateticket', {
         method: 'PUT',
@@ -109,8 +117,8 @@ const AdminDashboard = () => {
       <h3>All Tickets:</h3>
       <h3>{tickets.length}</h3>
       <ul className={`${styles.ticketList} list-group`}>
-        {tickets.length > 0 && tickets.map((ticket) => (
-          <li key={ticket.id} className={`${styles.ticketItem} list-group-item d-flex justify-content-between align-items-center`} 
+        {tickets.length > 0 && tickets.map((ticket,index) => (
+          <li key={index} className={`${styles.ticketItem} list-group-item d-flex justify-content-between align-items-center`} 
           onClick={() => handleSelectTicket(ticket.id)}>
             <div>
               {ticket.title}
