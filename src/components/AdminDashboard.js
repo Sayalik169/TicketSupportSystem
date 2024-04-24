@@ -23,6 +23,7 @@ const AdminDashboard = () => {
         }
         const fetchedTickets = await response.json();
         console.log( 'fetchedticktes',fetchedTickets);
+        console.log( 'ticktes',tickets);
         dispatch(createTicketSuccess(fetchedTickets)); // Dispatch a custom action to set tickets
       } catch (error) {
         console.error('Error fetching tickets:', error);
@@ -83,7 +84,7 @@ const AdminDashboard = () => {
       }
 
       setSelectedTicketId(null); // Clear selected ticket after successful update
-       dispatch(updateTicket({ id: ticketId, updates: { status: newStatus } }));
+      dispatch(updateTicket({ id: ticketId, updates: { status: newStatus } }));
 
     } catch (error) {
       console.error('Error updating ticket status:', error);

@@ -29,18 +29,15 @@ const App = () => {
       <Router>
         <Routes>
         <Route path="/" element={<AdminDashboard />} />
-          <Route
-            exact
-            path="/end-user/login"
-            element={<EndUserLogin onLoginSuccess={handleLoginSuccess} handleError={handleError} />}
+          <Route exact path="/end-user/login" element={<EndUserLogin onLoginSuccess={handleLoginSuccess} handleError={handleError} />}
           />
           <Route exact path="/end-user/register" element={<EndUserRegister />} />
           <>
           <Route exact path="/end-user/dashboard" element={<EndUserDashboard />} />
           <Route exact path="/end-user/create-ticket" element={<CreateTicketForm />} />
           
-          <Route exact path="/tech-support/dashboard" element={<TechSupportDashboard />} />
-          <Route exact path="/admin/dashboard" element={<AdminDashboard />} />
+          {/* <Route exact path="/tech-support/dashboard" element={<TechSupportDashboard />} />
+          <Route exact path="/admin/dashboard" element={<AdminDashboard />} /> */}
         </>
         </Routes>
       </Router>
